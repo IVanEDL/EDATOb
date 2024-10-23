@@ -10,9 +10,13 @@
 
 
 #include "definiciones.h"
-
-typedef struct nodo_empresa * Empresa;
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstring>
+#include <iostream>
+typedef struct tipo_empresa* Empresa;
+typedef struct tipo_persona* Persona;
+typedef struct nodo_persona* nodoPer;
 
 TipoRet CrearOrg(Empresa &e, Cadena cargo);
 // Inicializa la empresa y crea el primer cargo de la empresa.
@@ -65,6 +69,11 @@ TipoRet ListarPersonas(Empresa e, Cadena cargo);
 TipoRet ListarSuperCargos (Empresa e, Cadena cargo);
 // Dado un cargo listar los cargos que lo anteceden.
 // Lista todas los cargos que anteceden, en la jerarquía, al cargo de nombre cargo. 
+
+
+TipoRet NuevoCargoBro(Empresa &e, Empresa &cargoHermano, Cadena nuevoCargo);
+nodoPer BuscarPersonaArbol(Empresa e, Cadena ci);
+nodoPer BuscarPersonaNodo(nodoPer per, Cadena ci);
 
 #endif
 

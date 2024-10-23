@@ -5,30 +5,52 @@
 // empresa.c
 // Modulo de Implementacion de la Empresa
 
-#include "empresa.h"
-#include <iostream>
-
 using namespace std;
+#include "definiciones.h"
+#include "empresa.h"
+
+struct tipo_persona{
+    Cadena ci;
+    Cadena nom;
+};
+
+struct nodo_persona{
+    nodoPer next;
+    nodoPer prev;
+    Persona persona;
+};
+
+struct tipo_empresa{
+    Cadena cargo;
+    Empresa son;
+    Empresa bro;
+    nodoPer integrantes;
+};
+
+
 
 Empresa BuscarCargo(Empresa e, Cadena cargo){
-	if (e == NULL)
+	if(e == NULL){
 		return NULL;
-	else if (e->cargo == cargo)
+	}else if(strcasecmp(e->cargo, cargo)){
 		return e;
-	else if (e->bro != NULL)
-	{
-		if (BuscarCargo(e->bro, cargo) == NULL)
+	}else{
+	    Empresa aux = BuscarCargo(e->bro, cargo);
+		if(aux != NULL){
+			return aux;
+		}else{
 			return BuscarCargo(e->son, cargo);
+		}
 	}
 }
 
 TipoRet CrearOrg(Empresa &e, Cadena cargo){
 // Inicializa la empresa y crea el primer cargo de la empresa.
-// Originalmente la misma debería  estar vacía, en otro caso la operación quedará sin efecto. 
+// Originalmente la misma debería  estar vacía, en otro caso la operación quedará sin efecto.
 	if (e != NULL){
 		return ERROR;
 	} else {
-		e = new(Empresa);
+		e = new(tipo_empresa);
 		e->cargo = cargo, e->son = NULL, e->bro = NULL, e->integrantes = NULL;
 		return OK;
 	}
@@ -39,10 +61,12 @@ TipoRet EliminarOrg(Empresa &e){
 // Pendiente: esta función requiere modificaciones. Es un poco estúpido borrar la estructura nodo por-
 //-nodo sin una función adyacente que borre las personas de cada cargo. Pero hace lo que tiene que hacer.
 	if (e != NULL){
-		if (e->son != NULL)
+		if (e->son != NULL) {
 			EliminarOrg(e->son);
-		if (e->bro != NULL)
+		}
+		if (e->bro != NULL) {
 			EliminarOrg(e->bro);
+		}
 		e->cargo = NULL;
 		e->integrantes = NULL;
 		//En cuanto esté eliminar persona, aquí va una llamada a otra función que sea "limpiar toda persona" o así
@@ -57,7 +81,7 @@ TipoRet NuevoCargo(Empresa &e, Cadena cargoPadre, Cadena nuevoCargo){
 	Empresa aux = NULL;
 	Empresa aux2 = BuscarCargo(e, cargoPadre);
 	if (BuscarCargo(e, nuevoCargo) != NULL){
-		return Error;
+		return ERROR;
 	}else if (aux2->son != NULL){
 		return NuevoCargoBro(e, aux2->son, nuevoCargo);
 	}else{
@@ -66,13 +90,14 @@ TipoRet NuevoCargo(Empresa &e, Cadena cargoPadre, Cadena nuevoCargo){
 		aux->bro = NULL;
 		aux->cargo = nuevoCargo;
 		aux->integrantes = NULL;
+		aux2->son = aux;
 		return OK;
 	}
 }
 
 TipoRet NuevoCargoBro(Empresa &e, Empresa &cargoHermano, Cadena nuevoCargo){
 	if (BuscarCargo(e, nuevoCargo)->son != NULL){
-		return Error;
+		return ERROR;
 	}
 	else{
 		if (cargoHermano->bro != NULL){
@@ -99,18 +124,18 @@ TipoRet EliminarCargo(Empresa &e, Cadena cargo){
 
 TipoRet ListarCargosAlf(Empresa e){
 // Listar todos los cargos ordenados alfabéticamente.
-// Lista todos los cargos de la empresa ordenados alfabéticamente por nombre del cargo. 
+// Lista todos los cargos de la empresa ordenados alfabéticamente por nombre del cargo.
 	return NO_IMPLEMENTADA;
 }
 
 TipoRet ListarJerarquia(Empresa e){
-// Listar todos los cargos de la empresa en orden jerárquico. 
+// Listar todos los cargos de la empresa en orden jerárquico.
 // Lista todos los cargos de la empresa ordenados por nivel jerárquico e indentados
-// según se muestra el ejemplo de la letra. 
+// según se muestra el ejemplo de la letra.
 	return NO_IMPLEMENTADA;
 }
 
-nodo_persona BuscarPersonaArbol(Empresa e, Cadena ci){
+nodoPer BuscarPersonaArbol(Empresa e, Cadena ci){
 	if (e == NULL)
 		return NULL;
 	if (e->integrantes != NULL)
@@ -123,10 +148,10 @@ nodo_persona BuscarPersonaArbol(Empresa e, Cadena ci){
 	else if (e->bro != NULL) //Tambien por acá
 		return BuscarPersonaArbol(e->bro, ci);
 	else
-		return NULL;	
+		return NULL;
 }
 
-nodo_persona BuscarPersonaNodo(nodo_persona per, Cadena ci){
+nodoPer BuscarPersonaNodo(nodoPer per, Cadena ci){
 	if (per->persona->ci == ci)
 		return per;
 	else if (per->next != NULL)
@@ -144,15 +169,15 @@ TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci){
 	if (BuscarPersonaArbol(e, ci) != NULL)
 		return ERROR;
 	else{
-		nodo_persona aux1 = BuscarCargo(e, cargo)->integrantes;
-		nodo_persona aux2 = NULL;
+		nodoPer aux1 = BuscarCargo(e, cargo)->integrantes;
+		nodoPer aux2 = NULL;
 		if (aux1 == NULL){
 			aux2 = new(nodo_persona);
-			aux1->prev = NULL;
-			aux1->next = NULL;
-			aux1->persona = new(Persona);
-			aux1->persona->ci = ci;
-			aux1->persona->nom = nom;
+			aux2->prev = NULL;
+			aux2->next = NULL;
+			aux2->persona = new(Persona);
+			aux2->persona->ci = ci;
+			aux2->persona->nom = nom;
 			BuscarCargo(e, cargo)->integrantes = aux2;
 			return OK;
 		}
@@ -162,8 +187,9 @@ TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci){
 				aux1 = aux1->next;
 			}
 			aux1->prev = aux2;
+			aux2->next = aux1;
 			aux1->next = NULL;
-			aux1->persona = new(Persona);
+			aux1->persona = new(tipo_persona);
 			aux1->persona->ci = ci;
 			aux1->persona->nom = nom;
 			return OK;
@@ -171,8 +197,9 @@ TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci){
 		else{
 			aux2 = new(nodo_persona);
 			aux2->prev = aux1;
+			aux1->next = aux2;
 			aux2->next = NULL;
-			aux2->persona = new(Persona);
+			aux2->persona = new(tipo_persona);
 			aux2->persona->ci = ci;
 			aux2->persona->nom = nom;
 			return OK;
@@ -184,13 +211,13 @@ TipoRet EliminarPersona(Empresa &e, Cadena ci){
 // Eliminar una persona de un cargo.
 // Elimina una persona de cédula ci de la empresa siempre y cuando la misma exista,
 // en caso contrario la operación quedará sin efecto.
-	nodo_persona aux = BuscarPersonaArbol(e, ci);
+	nodoPer aux = BuscarPersonaArbol(e, ci);
 	if (aux == NULL)
 		return ERROR;
 	else{
 		aux->prev->next = aux->next;
 		aux->next->prev = aux->prev;
-		aux->persona = NULL;
+		delete(aux->persona);
 		return OK;
 	}
 }
@@ -204,8 +231,8 @@ TipoRet ReasignarPersona(Empresa &e, Cadena cargo, Cadena ci){
 }
 
 TipoRet ListarPersonas(Empresa e, Cadena cargo){
-// Dado un cargo listar las personas asignadas al mismo ordenadas por fecha de alta a la empresa. 
-// Lista todas las personas asignadas al cargo de nombre cargo. 
+// Dado un cargo listar las personas asignadas al mismo ordenadas por fecha de alta a la empresa.
+// Lista todas las personas asignadas al cargo de nombre cargo.
 	Empresa aux = BuscarCargo(e, cargo);
 	if (aux == NULL)
 		return ERROR;
@@ -215,7 +242,7 @@ TipoRet ListarPersonas(Empresa e, Cadena cargo){
 			return OK;
 		}
 		else{
-			nodo_persona aux2 = aux->integrantes;
+			nodoPer aux2 = aux->integrantes;
 			while (aux2 != NULL){
 				printf("CI: %c, Nombre: %c\n", aux2->ci, aux2->nom);
 				aux2 = aux2->next;
