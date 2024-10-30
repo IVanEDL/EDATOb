@@ -18,7 +18,7 @@ struct nodo_persona{
     nodoPer next;
     nodoPer prev;
     Persona persona;
-};
+}; //Nodo_Persona; Es un nodo de lista doble con una estructura Persona dentro.
 
 struct tipo_empresa{
     Cadena cargo;
@@ -85,7 +85,7 @@ TipoRet NuevoCargo(Empresa &e, Cadena cargoPadre, Cadena nuevoCargo){
 	}else if (aux2->son != NULL){
 		return NuevoCargoBro(e, aux2->son, nuevoCargo);
 	}else{
-		aux = new(Empresa);
+		aux = new(tipo_empresa);
 		aux->son = NULL;
 		aux->bro = NULL;
 		aux->cargo = nuevoCargo;
@@ -103,7 +103,7 @@ TipoRet NuevoCargoBro(Empresa &e, Empresa &cargoHermano, Cadena nuevoCargo){
 		if (cargoHermano->bro != NULL){
 			return NuevoCargoBro(e, cargoHermano->bro, nuevoCargo);
 		} else {
-			cargoNuevo = new(Empresa);
+			Empresa cargoNuevo = new(tipo_empresa);
 			cargoHermano->bro = cargoNuevo;
 			cargoNuevo->son = NULL;
 			cargoNuevo->cargo = nuevoCargo;
@@ -122,9 +122,22 @@ TipoRet EliminarCargo(Empresa &e, Cadena cargo){
 	return NO_IMPLEMENTADA;
 }
 
+/*Cadena[]BuscaryListar(Cadena[] &ret, Empresa e){
+	
+}*/
+
 TipoRet ListarCargosAlf(Empresa e){
 // Listar todos los cargos ordenados alfabéticamente.
 // Lista todos los cargos de la empresa ordenados alfabéticamente por nombre del cargo.
+/*	if(e == NULL){
+		return NULL;
+	}else if(e -> bro == NULL){
+		printf("cargo %s", e -> cargo);
+		return ListarCargosAlf(e -> son);
+	}else{
+		printf("cargo %s", e -> cargo);
+		return ListarCargosAlf(e -> bro);
+	}*/
 	return NO_IMPLEMENTADA;
 }
 
@@ -136,19 +149,20 @@ TipoRet ListarJerarquia(Empresa e){
 }
 
 nodoPer BuscarPersonaArbol(Empresa e, Cadena ci){
-	if (e == NULL)
+	if (e == NULL){
 		return NULL;
-	if (e->integrantes != NULL)
-		if (BuscarPersonaNodo(e->integrantes, ci) != NULL)
+	}else if(e->integrantes != NULL){
+		if (BuscarPersonaNodo(e->integrantes, ci) != NULL){
 			return BuscarPersonaNodo(e->integrantes, ci);
-	else if (e->son != NULL){ //Pueden haber problemas por acá,-
-	//-no estoy seguro como se recorre nodo por nodo un árbol sin explotar
-		return BuscarPersonaArbol(e->son, ci);
+		}
+	}else{
+	    nodoPer aux = BuscarPersonaArbol(e->bro, ci);
+		if(aux != NULL){
+			return aux;
+		}else{
+			return BuscarPersonaArbol(e->son, ci);
+		}
 	}
-	else if (e->bro != NULL) //Tambien por acá
-		return BuscarPersonaArbol(e->bro, ci);
-	else
-		return NULL;
 }
 
 nodoPer BuscarPersonaNodo(nodoPer per, Cadena ci){
@@ -175,7 +189,7 @@ TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci){
 			aux2 = new(nodo_persona);
 			aux2->prev = NULL;
 			aux2->next = NULL;
-			aux2->persona = new(Persona);
+			aux2->persona = new(tipo_persona);
 			aux2->persona->ci = ci;
 			aux2->persona->nom = nom;
 			BuscarCargo(e, cargo)->integrantes = aux2;
@@ -233,24 +247,22 @@ TipoRet ReasignarPersona(Empresa &e, Cadena cargo, Cadena ci){
 TipoRet ListarPersonas(Empresa e, Cadena cargo){
 // Dado un cargo listar las personas asignadas al mismo ordenadas por fecha de alta a la empresa.
 // Lista todas las personas asignadas al cargo de nombre cargo.
-	Empresa aux = BuscarCargo(e, cargo);
-	if (aux == NULL)
+	if (e == 00)
+    	return ERROR;
+	Empresa x = BuscarCargo(e, cargo);
+	printf("Cargo %c: \n", x->cargo);
+	if(x == NULL || x->integrantes == NULL || x->integrantes->persona == NULL){ //
 		return ERROR;
-	else{
-		if (aux->integrantes == NULL){
-			printf("bruh...");
-			return OK;
-		}
-		else{
-			nodoPer aux2 = aux->integrantes;
-			while (aux2 != NULL){
-				printf("CI: %c, Nombre: %c\n", aux2->ci, aux2->nom);
-				aux2 = aux2->next;
-			}
-			return OK;
-		}
+	}else{ //
+		nodoPer a = x -> integrantes;
+		while (a){
+			printf("CI = %s, Nombre = %s\n", a->persona->ci, a->persona->nom);
+			a = a->next;
+		}	
 	}
+	return OK;
 }
+
 
 TipoRet ListarSuperCargos (Empresa e, Cadena cargo){
 // Dado un cargo listar los cargos que lo anteceden.
