@@ -45,35 +45,12 @@ TipoRet ListarJerarquia(Empresa e);
 // Lista todos los cargos de la empresa ordenados por nivel jerárquico e indentados
 // según se muestra el ejemplo de la letra. 
 
-TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci);
-// Asignar una persona a un cargo, si este existe.
-// Asigna una persona de nombre nom  y cédula de identidad ci al cargo cargo
-// siempre que el cargo exista en la empresa y esa persona no este asignada a
-// ese u otro cargo, en caso contrario la operación quedará sin efecto.
-
-TipoRet EliminarPersona(Empresa &e, Cadena ci);
-// Eliminar una persona de un cargo.
-// Elimina una persona de cédula ci de la empresa siempre y cuando la misma exista,
-// en caso contrario la operación quedará sin efecto.
-
-TipoRet ReasignarPersona(Empresa &e, Cadena cargo, Cadena ci);
-// Reasignar una persona a un nuevo cargo.
-// Reasigna una persona de la empresa de cédula ci al nuevo cargo de nombre cargo
-// siempre que el cargo exista en la empresa y esa persona no este ya asignada a
-// dicho cargo. En caso contrario la operación quedará sin efecto.
-
-TipoRet ListarPersonas(Empresa e, Cadena cargo);
-// Dado un cargo listar las personas asignadas al mismo ordenadas por fecha de alta a la empresa. 
-// Lista todas las personas asignadas al cargo de nombre cargo. 
-
 TipoRet ListarSuperCargos (Empresa e, Cadena cargo);
 // Dado un cargo listar los cargos que lo anteceden.
 // Lista todas los cargos que anteceden, en la jerarquía, al cargo de nombre cargo. 
 
 
 TipoRet NuevoCargoBro(Empresa &e, Empresa &cargoHermano, Cadena nuevoCargo);
-nodoPer BuscarPersonaArbol(Empresa e, Cadena ci);
-nodoPer BuscarPersonaNodo(nodoPer per, Cadena ci);
 
 #endif
 
