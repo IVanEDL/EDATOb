@@ -27,30 +27,25 @@ struct tipo_empresa{
     nodoPer integrantes;
 };
 
-nodoPer BuscarPersonaArbol(Empresa e, Cadena ci){
+bool BuscarPersonaArbol(Empresa e, Cadena ci){
+	//True si no existe. False si sí.
 	if (e == NULL){
-		return NULL;
-	}else if(e->integrantes != NULL){
-		if (BuscarPersonaNodo(e->integrantes, ci) != NULL){
-			return BuscarPersonaNodo(e->integrantes, ci);
-		}
-	}else{
-	    nodoPer aux = BuscarPersonaArbol(e->bro, ci);
-		if(aux != NULL){
-			return aux;
-		}else{
-			return BuscarPersonaArbol(e->son, ci);
-		}
+		return true;
 	}
-}
 
-nodoPer BuscarPersonaNodo(nodoPer per, Cadena ci){
-	if (per->persona->ci == ci)
-		return per;
-	else if (per->next != NULL)
-		return BuscarPersonaNodo(per->next, ci);
-	else
-		return NULL;
+	nodoPer temp = e->integrantes;
+	while (temp != NULL){
+		if (strcasecmp(temp->persona.ci, ci) == 1){
+			return false;
+		}
+		temp = temp->next;
+	}
+
+	if (!BuscarPersonaArbol(e->son, ci)){
+		return false;
+	}
+
+	return BuscarPersonaArbol(e->bro, ci);
 }
 
 TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci){
@@ -59,41 +54,37 @@ TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci){
 // siempre que el cargo exista en la empresa y esa persona no este asignada a
 // ese u otro cargo, en caso contrario la operación quedará sin efecto.
 // Adicional: Que hijo de mil puta esto de tener que buscar la persona en todo el árbol.
-	if (BuscarPersonaArbol(e, ci) != NULL)
+	tipo_persona Per;
+	Per.ci = ci;
+	Per.nombre = nombre;
+
+	Empresa Nuevocargo = BuscarCargo(e, cargo);
+
+	if (cargo == NULL){
+		printf("Cargo no encontrado.")
 		return ERROR;
-	else{
-		nodoPer aux1 = BuscarCargo(e, cargo)->integrantes;
-		nodoPer aux2 = NULL;
-		if (aux1 == NULL){
-			aux2 = new(nodo_persona);
-			aux2->next = NULL;
-			aux2->persona = new(tipo_persona);
-			aux2->persona->ci = ci;
-			aux2->persona->nom = nom;
-			BuscarCargo(e, cargo)->integrantes = aux2;
-			return OK;
-		}else if (aux1->next != NULL){
-			while (aux1 != NULL){
-				aux2 = aux1;
-				aux1 = aux1->next;
-			}
-			aux1->prev = aux2;
-			aux2->next = aux1;
-			aux1->next = NULL;
-			aux1->persona = new(tipo_persona);
-			aux1->persona->ci = ci;
-			aux1->persona->nom = nom;
-			return OK;
-		}else{
-			aux2 = new(nodo_persona);
-			aux2->prev = aux1;
-			aux1->next = aux2;
-			aux2->next = NULL;
-			aux2->persona = new(tipo_persona);
-			aux2->persona->ci = ci;
-			aux2->persona->nom = nom;
-			return OK;
+	}
+
+	if (!BuscarPersonaArbol(e, ci)){
+		printf("Persona ya existente.");
+		return ERROR;
+	}
+
+	nodoPer NuevoEmp = new(nodo_persona);
+	NuevoEmp->next = NULL;
+	NuevoEmp->prev = NULL;
+
+	if (Nuevocargo->integrantes == NULL){
+		Nuevocargo->integrantes = NuevoEmp;
+		return OK;
+	}else{
+		nodoPer temp = Nuevocargo->integrantes;
+		while (temp->next != NULL){
+			temp = temp->next;
 		}
+		temp->next = NuevoEmp;
+		NuevoEmp->prev = NuevoEmp;
+		return OK;
 	}
 }
 
