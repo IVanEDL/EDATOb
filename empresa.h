@@ -10,6 +10,8 @@
 
 
 #include "definiciones.h"
+#include "listaOrdenes.h"
+#include "personas.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstring>
@@ -17,6 +19,7 @@
 typedef struct tipo_empresa* Empresa;
 typedef struct tipo_persona* Persona;
 typedef struct nodo_persona* nodoPer;
+typedef struct tipo_cargo* TipoCargo;
 
 TipoRet CrearOrg(Empresa &e, Cadena cargo);
 // Inicializa la empresa y crea el primer cargo de la empresa.
@@ -36,21 +39,7 @@ TipoRet EliminarCargo(Empresa &e, Cadena cargo);
 // Si el cargo a eliminar posee subcargos, éstos deberán ser eliminados también, así como
 // las personas asociadas a cada uno de los cargos suprimidos.
 
-TipoRet ListarCargosAlf(Empresa e);
-// Listar todos los cargos ordenados alfabéticamente.
-// Lista todos los cargos de la empresa ordenados alfabéticamente por nombre del cargo. 
-
-TipoRet ListarJerarquia(Empresa e);
-// Listar todos los cargos de la empresa en orden jerárquico. 
-// Lista todos los cargos de la empresa ordenados por nivel jerárquico e indentados
-// según se muestra el ejemplo de la letra. 
-
-TipoRet ListarSuperCargos (Empresa e, Cadena cargo);
-// Dado un cargo listar los cargos que lo anteceden.
-// Lista todas los cargos que anteceden, en la jerarquía, al cargo de nombre cargo. 
-
-
-TipoRet NuevoCargoBro(Empresa &e, Empresa &cargoHermano, Cadena nuevoCargo);
+TipoRet NuevoCargoBro(TipoCargo &e, TipoCargo &cargoHermano, Cadena nuevoCargo);
 
 #endif
 

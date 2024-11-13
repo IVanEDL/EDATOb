@@ -10,6 +10,7 @@
 
 
 #include "definiciones.h"
+#include "empresa.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstring>
@@ -17,6 +18,7 @@
 typedef struct tipo_empresa* Empresa;
 typedef struct tipo_persona* Persona;
 typedef struct nodo_persona* nodoPer;
+typedef struct tipo_cargo* TipoCargo;
 
 TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci);
 // Asignar una persona a un cargo, si este existe.
@@ -39,7 +41,7 @@ TipoRet ListarPersonas(Empresa e, Cadena cargo);
 // Dado un cargo listar las personas asignadas al mismo ordenadas por fecha de alta a la empresa. 
 // Lista todas las personas asignadas al cargo de nombre cargo. 
 
-nodoPer BuscarPersonaArbol(Empresa e, Cadena ci);
-nodoPer BuscarPersonaNodo(nodoPer per, Cadena ci);
+bool BuscarPersonaArbol(Empresa e, Cadena ci);
+bool BuscarPersonaNodo(nodoPer per, Cadena ci);
 
 #endif

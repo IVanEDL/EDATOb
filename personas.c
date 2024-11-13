@@ -27,6 +27,13 @@ struct tipo_empresa{
     nodoPer integrantes;
 };
 
+struct tipo_cargo{
+    Cadena cargo;
+    Empresa son;
+    Empresa bro;
+    nodoPer integrantes;
+};
+
 bool BuscarPersonaArbol(Empresa e, Cadena ci){
 	//True si no existe. False si sí.
 	if (e == NULL){
@@ -35,7 +42,7 @@ bool BuscarPersonaArbol(Empresa e, Cadena ci){
 
 	nodoPer temp = e->integrantes;
 	while (temp != NULL){
-		if (strcasecmp(temp->persona.ci, ci) == 1){
+		if (strcasecmp(temp->persona->ci, ci) == 1){
 			return false;
 		}
 		temp = temp->next;
@@ -56,12 +63,12 @@ TipoRet AsignarPersona(Empresa &e, Cadena cargo, Cadena nom, Cadena ci){
 // Adicional: Que hijo de mil puta esto de tener que buscar la persona en todo el árbol.
 	tipo_persona Per;
 	Per.ci = ci;
-	Per.nombre = nombre;
+	Per.nom = nom;
 
-	Empresa Nuevocargo = BuscarCargo(e, cargo);
+	TipoCargo Nuevocargo = BuscarCargo(e, cargo);
 
 	if (cargo == NULL){
-		printf("Cargo no encontrado.")
+		printf("Cargo no encontrado.");
 		return ERROR;
 	}
 
@@ -116,7 +123,7 @@ TipoRet ListarPersonas(Empresa e, Cadena cargo){
 // Lista todas las personas asignadas al cargo de nombre cargo.
 	if (e == 00)
     	return ERROR;
-	Empresa x = BuscarCargo(e, cargo);
+	TipoCargo x = BuscarCargo(e, cargo);
 	printf("Cargo %c: \n", x->cargo);
 	if(x == NULL || x->integrantes == NULL || x->integrantes->persona == NULL){ //
 		return ERROR;
