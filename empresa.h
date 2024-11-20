@@ -39,7 +39,8 @@ TipoRet EliminarCargo(Empresa &e, Cadena cargo);
 // Si el cargo a eliminar posee subcargos, éstos deberán ser eliminados también, así como
 // las personas asociadas a cada uno de los cargos suprimidos.
 
-TipoRet NuevoCargoBro(TipoCargo &e, TipoCargo &cargoHermano, Cadena nuevoCargo);
+TipoCargo NuevoCargoBro(TipoCargo &cargoHermano, Cadena nuevoCargo);
+TipoCargo BuscarCargo(TipoCargo e, Cadena cargo);
 
 #endif
 

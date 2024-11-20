@@ -11,38 +11,36 @@ using namespace std;
 
 struct tipo_cargo{
     Cadena cargo;
-    Empresa son;
-    Empresa bro;
+    TipoCargo son;
+    TipoCargo bro;
     nodoPer integrantes;
 };
 
 struct tipo_empresa{
-    Cadena cargo;
-    Empresa son;
-    Empresa bro;
-    nodoPer integrantes;
+	ListaOrden lorden;
+	TipoCargo cargoPrin;
 };
 
 struct tipo_lista_orden{
     Cadena cargo;
-    Empresa correspon;
-    Empresa supercargo;
+    TipoCargo correspon;
+    TipoCargo supercargo;
     ListaOrden next;
     ListaOrden prev;
 };
 
-ListaOrden crearListaOrden(Empresa &e, cargo car){
+ListaOrden crearListaOrden(Empresa &e, TipoCargo car){
     //Crea una nueva lista orden. Pre: Deben existir car y e.
     ListaOrden aux = new(tipo_lista_orden);
     e->lorden = aux;
-    aux->cargo = car;
+    aux->cargo = car->cargo;
     aux->correspon = e->cargoPrin;
     aux->prev = NULL;
     aux->next = NULL;
     return aux;
 }
 
-ListaOrden crearNodoLorden(TipoCargo e, cargo car, Empresa supercar, ListaOrden lorden){
+ListaOrden crearNodoLorden(TipoCargo e, Cadena car, TipoCargo supercar, ListaOrden lorden){
     //PRE; Car, e, y Lorden deben existir.
     //Crea un nodo adicional a la lista de órdenes. 
     ListaOrden aux = new(tipo_lista_orden);
@@ -58,7 +56,7 @@ ListaOrden crearNodoLorden(TipoCargo e, cargo car, Empresa supercar, ListaOrden 
     return aux;
 }
 
-void eliminarNodoLorden(ListaOrden lorden, Empresa e){
+void eliminarNodoLorden(ListaOrden lorden, TipoCargo e){
     //Elimina un nodo de Lista Orden, usar cuando se elimine un cargo. PRE; Debe existir una lista orden y el cargo que se quiere borrar.
     if (lorden->correspon == e){
         lorden->next->prev = NULL;
@@ -74,14 +72,53 @@ void eliminarNodoLorden(ListaOrden lorden, Empresa e){
     }
 }
 
+void cambioNodoLorden(ListaOrden &a, ListaOrden &b) {
+    // Intercambia los valores de "cargo" y "correspon" (sin mover los nodos físicamente)
+    Cadena aux = a->cargo;
+    TipoCargo aux2 = a->correspon;
+
+    a->cargo = b->cargo;
+    a->correspon = b->correspon;
+
+    b->cargo = aux;
+    b->correspon = aux2;
+}
+
+void ordenarListaOrden(ListaOrden &inicio) {
+    if (inicio == NULL)
+        return;
+
+    bool Check;
+    do {
+        Check = false;
+        ListaOrden actual = inicio;
+
+        while (actual->next != NULL) {
+            if (strcmp(actual->cargo, actual->next->cargo) > 0) {
+                cambioNodoLorden(actual, actual->next);
+                Check = true;
+            }
+            actual = actual->next;
+        }
+    } while (Check);
+}
+
+
 TipoRet ListarCargosAlf(Empresa e){
 // Listar todos los cargos ordenados alfabéticamente.
 // Lista todos los cargos de la empresa ordenados alfabéticamente por nombre del cargo.
-	if (e == NULL){
-		return ERROR;
-	} else {
-		
-	}
+	if (e == NULL || e->lorden == NULL) {
+        std::cout << "La idea de listar los cargos alfabeticamente es que hayan cargos, capo.\n";
+        return ERROR;
+    }
+    
+    ordenarListaOrden(e->lorden);
+    
+    ListaOrden actual = e->lorden;
+    while (actual != NULL) {
+        std::cout << actual->cargo << "\n";
+        actual = actual->next;
+    }
 }
 
 TipoRet ListarJerarquia(Empresa e){

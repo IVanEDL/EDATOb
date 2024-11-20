@@ -32,4 +32,7 @@ TipoRet ListarSuperCargos (Empresa e, Cadena cargo);
 // Dado un cargo listar los cargos que lo anteceden.
 // Lista todas los cargos que anteceden, en la jerarquía, al cargo de nombre cargo. 
 
+ListaOrden crearListaOrden(Empresa &e, TipoCargo car);
+ListaOrden crearNodoLorden(TipoCargo e, Cadena car, TipoCargo supercar, ListaOrden lorden);
+void eliminarNodoLorden(ListaOrden lorden, TipoCargo e);
 #endif

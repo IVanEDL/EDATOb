@@ -41,7 +41,9 @@ TipoRet ListarPersonas(Empresa e, Cadena cargo);
 // Dado un cargo listar las personas asignadas al mismo ordenadas por fecha de alta a la empresa. 
 // Lista todas las personas asignadas al cargo de nombre cargo. 
 
-bool BuscarPersonaArbol(Empresa e, Cadena ci);
+bool BuscarPersonaArbol(TipoCargo e, Cadena ci);
 bool BuscarPersonaNodo(nodoPer per, Cadena ci);
+nodoPer BuscarPersonaArbolAux(TipoCargo e, Cadena ci);
+void LiberarPersonas(nodoPer &nodP);
 
 #endif
