@@ -30,7 +30,7 @@ struct tipo_lista_orden{
 };
 
 ListaOrden crearListaOrden(Empresa &e, TipoCargo car){
-    //Crea una nueva lista orden. Pre: Deben existir car y e.
+    //Crea una nueva lista orden. Pre: Deben existir el cargo que usar de base a la lista, y una empresa.
     ListaOrden aux = new(tipo_lista_orden);
     e->lorden = aux;
     aux->cargo = car->cargo;
@@ -41,7 +41,7 @@ ListaOrden crearListaOrden(Empresa &e, TipoCargo car){
 }
 
 ListaOrden crearNodoLorden(TipoCargo e, Cadena car, TipoCargo supercar, ListaOrden lorden){
-    //PRE; Car, e, y Lorden deben existir.
+    //PRE; Debe recibir un cargo e al cual apuntar, su nombre car, el cargopadre y la lista original lorden.
     //Crea un nodo adicional a la lista de órdenes. 
     ListaOrden aux = new(tipo_lista_orden);
     while (lorden->next != NULL){
@@ -73,15 +73,18 @@ void eliminarNodoLorden(ListaOrden lorden, TipoCargo e){
 }
 
 void cambioNodoLorden(ListaOrden &a, ListaOrden &b) {
-    // Intercambia los valores de "cargo" y "correspon" (sin mover los nodos físicamente)
+    // Cambia los valores internos de dos nodos en una lista.
     Cadena aux = a->cargo;
     TipoCargo aux2 = a->correspon;
+    TipoCargo aux3 = a->supercargo;
 
     a->cargo = b->cargo;
     a->correspon = b->correspon;
+    a->supercargo = b->supercargo;
 
     b->cargo = aux;
     b->correspon = aux2;
+    b->supercargo = aux3;
 }
 
 void ordenarListaOrden(ListaOrden &inicio) {
@@ -101,7 +104,8 @@ void ordenarListaOrden(ListaOrden &inicio) {
             actual = actual->next;
         }
     } while (Check);
-}
+} //La idea es usar bubble sort para ir intercambiando los números y punteros de modo que se reorganice y se pueda printear bien.
+//¿Funciona? No sé, aún no pude testear tan lejos :P
 
 
 TipoRet ListarCargosAlf(Empresa e){
@@ -112,13 +116,13 @@ TipoRet ListarCargosAlf(Empresa e){
         return ERROR;
     }
     
-    ordenarListaOrden(e->lorden);
+    ordenarListaOrden(e->lorden); //Acá llamamos a la función orden de lista para tenerlo ordenado alfabeticamente
     
     ListaOrden actual = e->lorden;
     while (actual != NULL) {
         std::cout << actual->cargo << "\n";
         actual = actual->next;
-    }
+    } //Y acá se printea nodo por nodo el cargo dentro.
 }
 
 TipoRet ListarJerarquia(Empresa e){

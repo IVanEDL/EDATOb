@@ -1,6 +1,12 @@
-La laptop querida casi crashea con todo mi progreso sin guardar debido a que me puse 
-a revisar cosas.
+Concluimos en que, en general, mi conocimiento, tiempo y ánimos en solitario no
+han logrado ser suficiente para finiquitar el proyecto.
 
-VSC, te quiero.
+Si bien la semántica de la mayoría de módulos y funciones hechas es correcta y debería
+ser comprensible, la cantidad de fallos de segmentación, errores casi al azar de malloc
+y en general que debuggear esto parece imposible, simplemente no quiero más nada con 
+la vida.
 
-También quiero morir. Si lees esto, comprame una cerveza.
+Si me lo llevo a examen boeh, debería haber buscado un mejor grupo. Si no, mejor.
+Afaik, ninguna de las funciones excepto CrearOrg llega a un resultado de OK. 
+Igual es mi testeo, estoy probando a partir de un compilador online así que igual 
+el rendimiento es menor, pero... No sé. Estoy cansado.

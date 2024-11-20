@@ -1,0 +1,47 @@
+struct tipo_persona {
+	Cadena ci;
+	Cadena nom;
+};
+Es un tipo genérico. Refleja a una persona con sus predeterminados CI y Nom.
+De haber tenido más tiempo y apoyo, habría hecho falta añadir una variable de fecha
+la cual sea fechaInicio, asignada al llamar AsignarPersona y que permita reordenar
+personas en base a fecha de entrada a la empresa en vez de hacerlo al azar.
+
+struct nodo_persona {
+	nodoPer next;
+	nodoPer prev;
+	Persona persona;
+};
+Es un nodo de lista doblemente encadenada que en su interior posee una estructura de tipo Persona.
+
+struct tipo_cargo {
+	Cadena cargo;
+	TipoCargo son;
+	TipoCargo bro;
+	nodoPer integrantes;
+};
+Es un nodo de árbol finitario, representando un cargo dentro de la empresa.
+Tiene una cadena cargo, el nombre del mismo, un puntero al primer hijo, uno al segundo hermano
+Y el primer nodo de una lista doblemente encadenada de nodo_persona, que representa
+los empleados en el mismo.
+
+struct tipo_empresa {
+	ListaOrden lorden;
+	TipoCargo cargoPrin;
+};
+Es una estructura general que marca el inicio de una empresa. En su interior tiene un puntero
+al primer cargo y máximo de la empresa, véase cargoPrin para CEO, y el primer puntero de una
+lista doblemente encadenada de tipo_lista_orden. 
+
+struct tipo_lista_orden{
+    Cadena cargo;
+    TipoCargo correspon;
+    TipoCargo supercargo;
+    ListaOrden next;
+    ListaOrden prev;
+};
+Esta es la estructura más compleja de todas. Se trata de un nodo de una lista doblemente encadenada,
+la cual en su interior posee una cadena cargo correspondiente a la cadena cargo del cargo correspon
+al que apunta. A su vez, supercargo apunta al padre directo de correspon.
+Es una lista que, en un mundo idílico donde se haya hecho todo, permite listar ordenadamente
+los cargos, los supercargos de un cargo en particular, y las jerarquías con mayor facilidad.

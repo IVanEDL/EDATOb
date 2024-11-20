@@ -41,6 +41,8 @@ TipoRet EliminarCargo(Empresa &e, Cadena cargo);
 
 TipoCargo NuevoCargoBro(TipoCargo &cargoHermano, Cadena nuevoCargo);
 TipoCargo BuscarCargo(TipoCargo e, Cadena cargo);
+TipoRet EliminarCargoAux(TipoCargo &nodo, Cadena cargo);
+void EliminarSubCargo(TipoCargo &subC);
 
 #endif
 

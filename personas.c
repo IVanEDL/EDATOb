@@ -134,15 +134,11 @@ void LiberarPersonas(nodoPer &nodP){
         nodoPer temp = nodP;
         nodP = nodP->next;
         
-        // Liberar la memoria de la persona
-        delete[] temp->persona->ci;
-        delete[] temp->persona->nom;
+        // Borramos a la persona y al nodo
         delete temp->persona;
-
-        // Liberar el nodo
         delete temp;
-    }
-}
+    } //Siempre y cuando haya nodos que borrar.
+} //Acá la idea es borrar todas las personas de un cargo.
 
 TipoRet ReasignarPersona(Empresa &e, Cadena cargo, Cadena ci){
 // Reasignar una persona a un nuevo cargo.
